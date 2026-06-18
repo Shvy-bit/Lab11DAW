@@ -9,15 +9,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.css',
 })
 export class Login {
-  public username = '';
-  public password = '';
-
   private auth = inject(Auth);
 
-  public login() {
+  public login(user: string, password: string) {
     const data = {
-      username: this.username,
-      password: this.password,
+      username: user,
+      password: password,
     };
 
     this.auth.login(data).subscribe((res: any) => {

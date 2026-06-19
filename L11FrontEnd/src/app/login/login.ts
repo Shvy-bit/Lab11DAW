@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Auth } from '../services/auth';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
+import { Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -8,18 +9,25 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login{
+  private router = inject(Router);
   private auth = inject(Auth);
 
-  public login(user: string, password: string) {
-    const data = {
-      username: user,
-      password: password,
-    };
-
-    this.auth.login(data).subscribe((res: any) => {
-      localStorage.setItem('token', res.access);
-      console.log('Login correcto');
-    })
+  public login(form: NgForm) {
+    if(form.invalid) { console.log("Invalido"); }
+    else {
+      this.auth.login(form.value).subscribe({
+        next: (res: any) => {
+          localStorage.setItem('token', res.access);
+          console.log('Login correcto');
+          this.router.navigate(['/index/'])
+        },
+        error: (error) => {
+          alert("Credenciales incorrectas");
+          console.log('Error', error);
+          form.reset(); 
+        }
+      })
+    }
   }
 }

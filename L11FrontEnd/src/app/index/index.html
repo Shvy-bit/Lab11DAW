@@ -1,0 +1,14 @@
+<div class="card main">
+    <h2 class="center">Usuarios</h2>
+
+    <div class="card users">
+        @for (user of users(); track user) {
+            <button>{{user.name}}</button>
+        }
+        @empty {
+            <p class="center">No se encontro nada</p>
+        }
+    </div>
+
+    <button (click)="logout()">Cerrar sesión</button>
+</div>
